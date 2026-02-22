@@ -1,23 +1,19 @@
 import discord
-from discord.ext import commands
-
 import os
-TOKEN = os.getenv("TOKEN")
 
 intents = discord.Intents.default()
 intents.members = True
-intents.message_content = True
 
-bot = commands.Bot(command_prefix="!", intents=intents)
+client = discord.Client(intents=intents)
 
-@bot.event
+@client.event
 async def on_ready():
-    print(f"{bot.user} đã online!")
+    print(f'✅ Bot đã đăng nhập với tên {client.user}')
 
-@bot.event
+@client.event
 async def on_member_join(member):
-    channel = discord.utils.get(member.guild.text_channels, name="xin-chào")
+    channel = member.guild.system_channel
     if channel:
-        await channel.send(f"👻 Chào mừng {member.mention} đến với server!")
+        await channel.send(f'👋 Chào mừng {member.mention} đến với server!')
 
-bot.run(TOKEN)
+client.run(os.getenv("TOKEN"))
